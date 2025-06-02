@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="src.roommate.roommatebasicapp.ChoresController"
+            prefWidth="400" prefHeight="400">
+
+    <!-- TableView -->
+    <TableView fx:id="choresTable" layoutX="10" layoutY="10" prefHeight="300" prefWidth="380">
+        <columns>
+            <TableColumn fx:id="choreNameColumn" text="Chore Name" prefWidth="200"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="180"/>
+        </columns>
+    </TableView>
+
+    <!-- TextField for new chore -->
+    <TextField fx:id="choreNameField" layoutX="10" layoutY="320" prefWidth="380" promptText="Enter chore name"/>
+
+    <!-- Buttons in HBox -->
+    <HBox layoutX="10" layoutY="360" spacing="10" alignment="CENTER_LEFT">
+        <children>
+            <Button fx:id="addChoreButton" text="Add Chore" onAction="#onAddChoreButtonClick" prefWidth="120"/>
+            <Button fx:id="markInProcessButton" text="Mark In Process" onAction="#onMarkInProcessButtonClick" prefWidth="120"/>
+            <Button fx:id="markCompletedButton" text="Mark Completed" onAction="#onMarkCompletedButtonClick" prefWidth="120"/>
+        </children>
+    </HBox>
+
+</AnchorPane>

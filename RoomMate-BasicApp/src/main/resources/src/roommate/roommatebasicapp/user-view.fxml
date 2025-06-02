@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="src.roommate.roommatebasicapp.AccountController"
+            prefWidth="500" prefHeight="500">
+
+    <VBox alignment="TOP_CENTER" spacing="15"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20"
+          AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          fillWidth="true">
+
+        <!-- Etichetă utilizator logat -->
+        <Label fx:id="usernameLabel" text="Welcome, User!"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <!-- Buton creare cameră -->
+        <Button fx:id="createRoomButton" text="Create Room"
+                onAction="#onCreateRoomButtonClick" prefWidth="200" />
+
+        <!-- Etichetă + câmp cod cameră -->
+        <Label text="Join room with code:" />
+        <TextField fx:id="roomCodeTextField" promptText="Enter code" prefWidth="250" />
+
+        <!-- Buton Join Room -->
+        <Button fx:id="joinRoomButton" text="Join Room"
+                onAction="#onJoinRoomButtonClick" prefWidth="200" />
+
+        <!-- Tabel camere utilizator -->
+        <TableView fx:id="roomsTable" prefHeight="300" prefWidth="450">
+            <columns>
+                <TableColumn fx:id="roomCodeColumn" text="Room Code" prefWidth="150"/>
+                <TableColumn fx:id="roomNameColumn" text="Room Name" prefWidth="280"/>
+            </columns>
+        </TableView>
+
+        <Button fx:id="closeButton" text="close"
+                onAction="#onCloseButtonClick" prefWidth="200" />
+    </VBox>
+
+</AnchorPane>

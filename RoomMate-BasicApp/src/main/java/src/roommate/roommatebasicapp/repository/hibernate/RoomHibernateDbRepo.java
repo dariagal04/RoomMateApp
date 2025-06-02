@@ -4,8 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import src.roommate.roommatebasicapp.domain.Room;
-import src.roommate.roommatebasicapp.domain.RoomsMembers;
+import src.roommate.roommatebasicapp.domain.*;
 import src.roommate.roommatebasicapp.repository.Interfaces.IRoomDbRepo;
 
 import java.util.List;
@@ -115,5 +114,40 @@ public class RoomHibernateDbRepo implements IRoomDbRepo {
             if (tx != null) tx.rollback();
             return false;
         }
+    }
+
+    @Override
+    public Iterable<RoomsMembers> findByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public boolean saveExpense(Expenses expense) {
+        return false;
+    }
+
+    @Override
+    public List<Expenses> getExpenses(String code) {
+        return List.of();
+    }
+
+    @Override
+    public List<Chores> getChores(String roomCode) {
+        return List.of();
+    }
+
+    @Override
+    public void addChore(String roomCode, Chores chore) {
+
+    }
+
+    @Override
+    public void updateChore(Chores chore) {
+
+    }
+
+    @Override
+    public List<User> findUsersByRoom(String id) {
+        return List.of();
     }
 }

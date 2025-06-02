@@ -105,4 +105,14 @@ public class UserHibernateDbRepo implements IUserDbRepo {
         logger.warn("saveEntityRM not implemented");
         return false;
     }
+
+    @Override
+    public void addScore(String username, int score) {
+
+    }
+
+    @Override
+    public int getUserScore(String username) {
+        return 0;
+    }
 }

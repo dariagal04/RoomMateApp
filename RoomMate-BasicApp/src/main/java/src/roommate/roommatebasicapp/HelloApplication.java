@@ -33,12 +33,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         Properties props = new Properties();
-//        try {
-//            props.load(new FileReader("/bd.config"));
-//        } catch (IOException e) {
-//            System.out.println("Cannot find bd.config " + e);
-//            logger.error(e);
-//        }
+
         try (InputStream input = HelloApplication.class.getResourceAsStream("/bd.config")) {
             if (input == null) {
                 System.out.println("Nu s-a găsit bd.config în resurse!");

@@ -23,6 +23,10 @@ public class UserService implements IService {
         return userDbRepo.deleteEntity(username);
     }
 
+    public void addScore(String username, int score){
+        userDbRepo.addScore(username,score);
+    };
+
 
     public User authenticate(String username, String password) {
         User user = userDbRepo.getOne(username);
@@ -38,6 +42,7 @@ public class UserService implements IService {
     }
 
 
-
-
+    public int getUserScore(String username) {
+        return userDbRepo.getUserScore(username);
+    }
 }

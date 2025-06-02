@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="src.roommate.roommatebasicapp.CreateRoomController">
+
+    <!-- Setăm layoutul general pentru a ocupa întreaga fereastră -->
+    <AnchorPane layoutX="0" layoutY="0" prefWidth="300" prefHeight="100"> <!-- Dimensiuni mai mici pentru fereastră -->
+
+        <!-- VBox pentru a organiza elementele centrându-le pe verticală și orizontală -->
+        <VBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50">
+            <!-- Titlu -->
+            <Label text=" Create RoomMate Room" style="-fx-font-size: 20px; -fx-font-weight: bold;" /> <!-- Font mai mic pentru a se potrivi într-un chenar mai mic -->
+
+            <!-- Câmp pentru Username -->
+
+            <!-- Câmp pentru Password -->
+
+            <Label text="Room Name:" />
+            <TextField fx:id="roomNameTextField" promptText="Enter room name" prefWidth="250" /> <!-- Lățimea câmpului password mai mică -->
+
+            <!-- Buton de Login -->
+            <Button fx:id="createRoomButton" text="Create Room" onAction="#onCreateRoomButtonClick" prefWidth="150" />
+
+        </VBox>
+
+    </AnchorPane>
+
+</AnchorPane>

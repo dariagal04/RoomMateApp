@@ -125,5 +125,47 @@ public class UserDbRepo implements IUserDbRepo {
         return false;
     }
 
+    @Override
+    public void addScore(String username, int score) {
+        String sql = "INSERT INTO score_points (username, score) VALUES (?, ?)";
+
+        try (Connection connection = dbUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setInt(2, score);
+
+            ps.executeUpdate();
+            logger.info("Score added successfully for user: {}", username);
+
+        } catch (SQLException e) {
+            logger.error("Error adding score for user {}: {}", username, e.getMessage());
+            throw new RuntimeException("Failed to add score for user " + username, e);
+        }
+    }
+    @Override
+    public int getUserScore(String username) {
+        String sql = "SELECT SUM(score) AS total_score FROM score_points WHERE username = ?";
+
+        try (Connection connection = dbUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                int totalScore = resultSet.getInt("total_score");
+                logger.info("Total score for user {}: {}", username, totalScore);
+                return totalScore;
+            } else {
+                logger.warn("No scores found for user: {}", username);
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error retrieving score for user {}: {}", username, e.getMessage());
+            throw new RuntimeException("Failed to retrieve score for user " + username, e);
+        }
+    }
 
 }

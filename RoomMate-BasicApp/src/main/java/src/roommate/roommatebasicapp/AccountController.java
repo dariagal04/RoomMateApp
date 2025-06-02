@@ -1,11 +1,12 @@
 package src.roommate.roommatebasicapp;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,8 @@ import src.roommate.roommatebasicapp.service.RoomService;
 import src.roommate.roommatebasicapp.service.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountController {
 
@@ -25,6 +28,16 @@ public class AccountController {
     RoomService roomService;
     User loggedInUser;
     Stage stage;
+
+    @FXML
+    private TableView<Room> roomsTable;
+
+    @FXML
+    private TableColumn<Room, String> roomCodeColumn;
+
+    @FXML
+    private TableColumn<Room, String> roomNameColumn;
+
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -44,6 +57,8 @@ public class AccountController {
     private Button joinRoomButton;
 
     @FXML
+    private Button closeButton;
+    @FXML
     private TextField roomCodeTextField;
 
     public void setUser(User user){
@@ -54,7 +69,9 @@ public class AccountController {
 
             System.out.println("Logged in user:"+ loggedInUser.getUsername());
 
-            usernameLabel.setText(loggedInUser.getNickname());
+            int score = userService.getUserScore(loggedInUser.getUsername());
+            usernameLabel.setText(loggedInUser.getNickname() + " (Score: " + score + ")");
+            loadUserRooms();
         }else{
             usernameLabel.setText("No user logged in");
             System.out.println("No user logged in");
@@ -62,10 +79,27 @@ public class AccountController {
     }
 
     @FXML
+    public void initialize() {
+        roomCodeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+        roomNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        roomsTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // dublu click
+                Room selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
+                if (selectedRoom != null) {
+                    openDashboardRoom(selectedRoom);
+                }
+            }
+        });
+
+    }
+
+    @FXML
     public void onCreateRoomButtonClick() throws IOException {
         openDashboardCreateRoom();
 
     }
+
+
 
     private void openDashboardCreateRoom() {
 
@@ -108,6 +142,23 @@ public class AccountController {
             RoomsMembers roomsMembers = new RoomsMembers(roomCode,loggedInUser.getUsername(),false);
 
 
+            boolean alreadyMember = false;
+            for (RoomsMembers rm : roomService.getRoomsForUser(loggedInUser.getUsername())) {
+                if (rm.getRoom_code().equals(roomCode)) {
+                    alreadyMember = true;
+                    break;
+                }
+            }
+
+            if (alreadyMember) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Already a member");
+                alert.setHeaderText(null);
+                alert.setContentText("You are already a member of this room.");
+                alert.showAndWait();
+                return;
+            }
+
             if (room != null) {
                 roomService.saveEntityRM(roomsMembers);
                 System.out.println("Room joined successfully");
@@ -136,6 +187,57 @@ public class AccountController {
         }
 
     }
+
+    private void loadUserRooms() {
+        try {
+            Iterable<RoomsMembers> userRooms = roomService.getRoomsForUser(loggedInUser.getUsername());
+
+            ObservableList<Room> rooms = FXCollections.observableArrayList();
+
+
+            for (RoomsMembers rm : userRooms) {
+                System.out.println("RoomMember found: " + rm.getRoom_code());
+                Room room = roomService.getOne(rm.getRoom_code());
+                if (room != null) {
+                    rooms.add(room);
+                }
+            }
+
+            //roomCodeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+            //roomNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            roomsTable.setItems(rooms);
+
+        } catch (Exception e) {
+            logger.error("Failed to load rooms for user", e);
+        }
+    }
+
+
+    private void openDashboardRoom(Room room) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("room-view.fxml"));
+            AnchorPane root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Room: " + room.getName());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            RoomController roomController = loader.getController();
+            roomController.setService(userService, roomService, stage);
+            roomController.setUser(loggedInUser);
+            roomController.setRoom(room); // Transmite și camera selectată
+
+        } catch (IOException e) {
+            logger.error("Error opening room view", e);
+        }
+    }
+
+    @FXML
+    private void onCloseButtonClick() {
+        stage.close();
+    }
+
 }
 
 
